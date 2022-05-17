@@ -36,7 +36,7 @@ def get_logger():
     return logger
 
 
-def email_exception(subject="黄金妖精出错"):
+def email_exception(subject="黄金妖精出错", email_notice=True):
     def wrapper(func):
         @functools.wraps(func)
         def inner(*args, **kwargs):
@@ -46,15 +46,17 @@ def email_exception(subject="黄金妖精出错"):
                 return res
             except Exception:
                 text = "\n" + traceback.format_exc()
-                msg = MIMEMultipart()
-                msg.attach(MIMEText(text, 'plain', 'utf-8'))
-                msg['Subject'] = subject
-                msg['From'] = self.email["sender"]
-                s = smtplib.SMTP_SSL(self.email["host"], self.email["port"])
-                s.login(self.email["sender"], self.email["passwd"])
-                s.sendmail(self.email["sender"], self.email["receivers"], msg.as_string())
                 logging.error(text)
-                logging.error("邮件已发送")
+                if email_notice and self.email["sender"] != "":
+                    msg = MIMEMultipart()
+                    msg.attach(MIMEText(text, 'plain', 'utf-8'))
+                    msg['Subject'] = subject
+                    msg['From'] = self.email["sender"]
+                    s = smtplib.SMTP_SSL(self.email["host"], self.email["port"])
+                    s.login(self.email["sender"], self.email["passwd"])
+                    s.sendmail(self.email["sender"], self.email["receivers"], msg.as_string())
+                    logging.error("邮件已发送")
+                return
 
         return inner
 
