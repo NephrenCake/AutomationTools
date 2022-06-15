@@ -48,6 +48,8 @@ def email_exception(subject="黄金妖精出错", email_notice=True):
                 text = "\n" + traceback.format_exc()
                 logging.error(text)
                 if email_notice and self.email["sender"] != "":
+                    # > https://blog.csdn.net/MATLAB_matlab/article/details/106240424
+                    # > py使用qq邮箱
                     msg = MIMEMultipart()
                     msg.attach(MIMEText(text, 'plain', 'utf-8'))
                     msg['Subject'] = subject
@@ -367,5 +369,5 @@ class GoldenFairy:
 
 if __name__ == '__main__':
     gf = GoldenFairy()
-    # gf.local_mission()
-    gf.remote_mission()
+    gf.local_mission()
+    # gf.remote_mission()
