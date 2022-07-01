@@ -1,21 +1,6 @@
 # -- coding: utf-8 --
 import os
-import subprocess
-import re
-
 import cv2
-
-
-def get_length(filename):
-    result = subprocess.Popen(["ffprobe", filename],
-                              stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT)
-
-    for x in result.stdout.readlines():
-        if b"Duration" in x:
-            print(x)
-            x = re.search(rb"Duration.+?\d{2}:(\d{2}):\d{2}", x)
-            return int(x.group(1))
 
 
 def get_video_duration(filename):
@@ -25,27 +10,39 @@ def get_video_duration(filename):
         frame_num = cap.get(7)
         duration = frame_num / rate
         return duration
-    return -1
+    return 0
 
 
-total = r"G:\考研资料\2022\03、2022数学\11、2022姜晓千\02.2022精讲班\2022线性代数基础课"
-d_l = os.listdir(total)
-d_t = []
+def count_video_time(cur_path: str, lv: int = 0):
+    text = "\t" * lv + "|-"
+    tim = 0
+    child_lines = []
 
-for d in d_l:
-    length = 0
-    path = total + "/" + d
-    ls = os.listdir(path)
-    for l in ls:
-        if l.endswith(".mp4"):
-            f = path + "/" + l
-            length += get_video_duration(f)
-    t = round(length / 3600, 2)
-    print(d, t, "h")
-    d_t.append(t)
+    cur_dir = os.listdir(cur_path)
+    if len(cur_dir) == 0:
+        return "", tim
 
-time = sum(d_t)
-print(time, "h")
+    for fn in cur_dir:
+        child = cur_path + "/" + fn
+        if os.path.isdir(child):
+            child_line, child_time = count_video_time(child, lv + 1)
+            child_lines.append(child_line)
+            tim += child_time
+        elif os.path.isfile(child) and fn.split(r".")[-1] in ["mp4"]:
+            tim += get_video_duration(child)
 
-# x = 8.15 + 3.49 + 4.50 + 2.56 + 1.35 + 2.77 + 1.41 + 1.53 + 2.41 + 4.40 + 2.56
-# print(x)
+    text += f"{cur_path} {round(tim / 3600, 2)} h"
+    for child_line in child_lines:
+        text += "\n" + child_line.split(cur_path)[0] + child_line.split(cur_path + "/")[-1]
+
+    print(f"{cur_path}")
+    return text, tim
+
+
+root = r"G:\考研资料\2023\王道\习题课\04.组成原理"
+res, t = count_video_time(root)
+print(res)
+
+with open(f"{root}/{round(t / 3600, 2)}.txt", mode="w", encoding="utf-8") as f:
+    f.write(res)
+    f.close()
