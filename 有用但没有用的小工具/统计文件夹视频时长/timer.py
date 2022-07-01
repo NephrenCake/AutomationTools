@@ -31,16 +31,18 @@ def count_video_time(cur_path: str, lv: int = 0):
         elif os.path.isfile(child) and fn.split(r".")[-1] in ["mp4"]:
             tim += get_video_duration(child)
 
+    if tim == 0:
+        return "", tim
+
     text += f"{cur_path} {round(tim / 3600, 2)} h"
     for child_line in child_lines:
         text += "\n" + child_line.split(cur_path)[0] + child_line.split(cur_path + "/")[-1]
-
     print(f"{cur_path}")
     return text, tim
 
 
 if __name__ == '__main__':
-    root = r"G:\考研资料\2023\王道\习题课\04.组成原理"
+    root = r"G:\考研资料\2022\05.【王道】全程班"
     res, t = count_video_time(root)
     print(res)
 
