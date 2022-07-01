@@ -39,10 +39,11 @@ def count_video_time(cur_path: str, lv: int = 0):
     return text, tim
 
 
-root = r"G:\考研资料\2023\王道\习题课\04.组成原理"
-res, t = count_video_time(root)
-print(res)
+if __name__ == '__main__':
+    root = r"G:\考研资料\2023\王道\习题课\04.组成原理"
+    res, t = count_video_time(root)
+    print(res)
 
-with open(f"{root}/{round(t / 3600, 2)}.txt", mode="w", encoding="utf-8") as f:
-    f.write(res)
-    f.close()
+    with open(f"{root}/{round(t / 3600, 2)}.txt", mode="w", encoding="utf-8") as f:
+        f.write(res)
+        f.close()
