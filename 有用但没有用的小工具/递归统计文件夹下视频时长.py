@@ -1,4 +1,9 @@
 # -- coding: utf-8 --
+"""
+@Author: NephrenCake
+@Date: 2022/7/1
+@Desc:
+"""
 import os
 import cv2
 
@@ -42,7 +47,7 @@ def count_video_time(cur_path: str, lv: int = 0):
 
 
 if __name__ == '__main__':
-    root = r"G:\考研资料\2022\05.【王道】全程班"
+    root = r"G:\考研资料\2022\2022姜晓千\05.330"
     res, t = count_video_time(root)
     print(res)
 

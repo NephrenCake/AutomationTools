@@ -1,7 +1,7 @@
 # -- coding: utf-8 --
 """
 @Author: NephrenCake
-@Date: 2022/6/15
+@Date: 2022/7/1
 @Desc:
 """
 import os
@@ -24,5 +24,5 @@ def find_file_by_name(cur_path: str, tar: str):
     return res
 
 
-result = find_file_by_name(r"G:\考研资料\2022\2022姜晓千\03.660", "587")
-
+if __name__ == '__main__':
+    result = find_file_by_name(r"G:\考研资料\2022\2022姜晓千\03.660", "587")
